@@ -1,0 +1,774 @@
+{
+	"info": {
+		"_postman_id": "b6181189-e6da-47f5-984b-5b8b1edd23bc",
+		"name": "Trello",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Tworzenie nowej tablicy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "af03e2c5-b076-4ba9-a12e-7b7cf7a892f7",
+						"exec": [
+							"let resBody;\r",
+							"\r",
+							"pm.test(\"should veryfi respopnse status code\", () => {\r",
+							"    //pm.expect(pm.response.code).to.eql(200)\r",
+							"    pm.response.to.have.status(200)\r",
+							"    resBody = pm.response.json();\r",
+							"    console.log(resBody);\r",
+							"\r",
+							"})\r",
+							"pm.test(\"should verify created board name\", () => {\r",
+							"    pm.expect(resBody.name).to.eql(pm.collectionVariables.get(\"board name\"));\r",
+							"})\r",
+							"\r",
+							"pm.test(\"shoudl verify response id\", () => {\r",
+							"    pm.expect(resBody.id.length).to.greaterThan(10);\r",
+							"    pm.collectionVariables.set(\"boardID\", resBody.id);\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"_postman_id": "55c16493-3da8-4285-af5b-227ccc7a6c4e",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}boards/?name={{board name}}&key={{key}}&token={{token}}",
+					"host": [
+						"{{baseUrl}}boards"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{board name}}"
+						},
+						{
+							"key": "key",
+							"value": "{{key}}"
+						},
+						{
+							"key": "token",
+							"value": "{{token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pokazywanie listy tablic",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fabfc5aa-6ce2-4974-8530-a5450ceeba2b",
+						"exec": [
+							"let resBody;\r",
+							"\r",
+							"pm.test(\"shoudl verify status code\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    resBody = pm.response.json();\r",
+							"\r",
+							"})\r",
+							"\r",
+							"pm.test(\"shodul verify type of name \", () => {\r",
+							"    resBody.map(item => {\r",
+							"        pm.expect(item.name).to.be.a(\"string\")\r",
+							"    })\r",
+							"})\r",
+							"pm.test(\"shoudl verify length of id\", ()=>{\r",
+							"    //console.log(resBody)\r",
+							"    pm.expect(resBody[0].id).to.have.lengthOf(24)\r",
+							"    pm.globals.set(\"bodyID\",resBody[0].id)\r",
+							"})\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"_postman_id": "3100eec4-0741-4966-96cd-63d69780f9b1",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}members/me/boards?key={{key}}&token={{token}}& ",
+					"host": [
+						"{{baseUrl}}members"
+					],
+					"path": [
+						"me",
+						"boards"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{key}}"
+						},
+						{
+							"key": "token",
+							"value": "{{token}}"
+						},
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": " ",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Tworzenie nowej listy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1122c65d-ac91-4f56-8a19-cf908891bb11",
+						"exec": [
+							"let resBody\r",
+							"\r",
+							"pm.test(\"shodul verify status code\", () => {\r",
+							"    pm.response.to.have.status(200)\r",
+							"    resBody = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"\r",
+							"pm.test(\"should verify response id\", () => {\r",
+							"    pm.expect(resBody.id.length).to.greaterThan(20)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"shodul verify list name\", () => {\r",
+							"    pm.expect(resBody.name).to.eql(pm.collectionVariables.get(\"listName\"))\r",
+							"})\r",
+							"\r",
+							"pm.collectionVariables.set(\"listID\", resBody.id)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"_postman_id": "e1fb4b1b-8e1f-4b36-9f94-01e182e4a466",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}boards/{{boardID}}/lists?key={{key}}&token={{token}}&name={{listName}}&",
+					"host": [
+						"{{baseUrl}}boards"
+					],
+					"path": [
+						"{{boardID}}",
+						"lists"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{key}}"
+						},
+						{
+							"key": "token",
+							"value": "{{token}}"
+						},
+						{
+							"key": "name",
+							"value": "{{listName}}"
+						},
+						{
+							"key": "",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pokazywanie dostepnych list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3318f996-810f-48ae-88d4-2e91a50fd645",
+						"exec": [
+							"let resBody\r",
+							"\r",
+							"pm.test(\"shodul verify status code\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    resBody = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"pm.test(\"shodul verify close value \", () => {\r",
+							"    resBody.map(item => {\r",
+							"        pm.expect(item.closed).to.eql(false)\r",
+							"    })\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"_postman_id": "85c4f41e-24ee-4fc0-b1ef-e19c1da31c24",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}boards/6274140ffbfffb1ee7e60dbc/lists?&key={{key}}&token={{token}}",
+					"host": [
+						"{{baseUrl}}boards"
+					],
+					"path": [
+						"6274140ffbfffb1ee7e60dbc",
+						"lists"
+					],
+					"query": [
+						{
+							"key": null,
+							"value": null
+						},
+						{
+							"key": "key",
+							"value": "{{key}}"
+						},
+						{
+							"key": "token",
+							"value": "{{token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Tworzenie nowej karty",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "707e1265-c6d8-4718-a53a-055d35674c7b",
+						"exec": [
+							"let resBody\r",
+							"\r",
+							"pm.test(\"should verify status code\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    resBody = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"pm.test(\"should veify langth of id\", () => {\r",
+							"    pm.expect(resBody.id.length).to.have.greaterThan(10)\r",
+							"\r",
+							"})\r",
+							"\r",
+							"pm.test(\"should verify value of id list and id board\", () => {\r",
+							"    pm.expect(resBody.idBoard).to.eql(pm.collectionVariables.get(\"boardID\"));\r",
+							"    pm.expect(resBody.idList).to.eql(pm.collectionVariables.get(\"listID\"));\r",
+							"})\r",
+							"\r",
+							"\r",
+							"pm.collectionVariables.set(\"cardID\", resBody.id)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"_postman_id": "7bd27825-9085-48fa-a0f0-bb0bd05dfbc9",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}cards?idList={{listID}}&key={{key}}&token={{token}}&name={{cardName}}",
+					"host": [
+						"{{baseUrl}}cards"
+					],
+					"query": [
+						{
+							"key": "idList",
+							"value": "{{listID}}"
+						},
+						{
+							"key": "key",
+							"value": "{{key}}"
+						},
+						{
+							"key": "token",
+							"value": "{{token}}"
+						},
+						{
+							"key": "name",
+							"value": "{{cardName}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pokazywanie listy stworzonych kart",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21968eba-5276-48ee-a82a-6a3cfaa0bdc7",
+						"exec": [
+							"let resBody\r",
+							"\r",
+							"pm.test(\"shoudl verify status code\", () => {\r",
+							"    pm.response.to.have.status(200)\r",
+							"    resBody = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"pm.test(\"shodul verify short link\", () => {\r",
+							"    resBody.map(item => {\r",
+							"        pm.expect(item.shortLink).to.be.a(\"string\")\r",
+							"    })\r",
+							"\r",
+							"})\r",
+							"\r",
+							"pm.test(\"should verify value idBoard and idList\", () => {\r",
+							"    resBody.map(item => {\r",
+							"        pm.expect(item.idBoard).to.eql(pm.collectionVariables.get(\"boardID\"));\r",
+							"        pm.expect(item.idList).to.eql(pm.collectionVariables.get(\"listID\"));\r",
+							"    })\r",
+							"})\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"_postman_id": "9f025431-2e30-40d7-a9a3-2d57d0a20093",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/boards/6294ffe63bc83b399fab7038/cards?key={{key}}&token={{token}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"boards",
+						"6294ffe63bc83b399fab7038",
+						"cards"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{key}}"
+						},
+						{
+							"key": "token",
+							"value": "{{token}}"
+						},
+						{
+							"key": "name",
+							"value": "dzdz",
+							"disabled": true
+						},
+						{
+							"key": "desc",
+							"value": "test test ",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "aktualizacja karty",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d66cf711-6363-41dd-b799-bffbe806c2a2",
+						"exec": [
+							"let resBody\r",
+							"\r",
+							"pm.test(\"should verify status code\", () => {\r",
+							"    pm.response.to.have.status(200)\r",
+							"    resBody = pm.response.json();\r",
+							"\r",
+							"})\r",
+							"\r",
+							"pm.test(\"should verify update name value\", () => {\r",
+							"    pm.expect(resBody.name).to.eql(pm.collectionVariables.get(\"updateCardName\"))\r",
+							"})\r",
+							"\r",
+							"pm.test(\"should verify update desc value\", () => {\r",
+							"    pm.expect(resBody.desc).to.eql(pm.collectionVariables.get(\"updateCardDesc\"))\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"_postman_id": "67bd0ba0-0da6-4839-9905-fc54b794fdf2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "desc",
+						"value": "test test ",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}cards/{{cardID}}?&key={{key}}&token={{token}}&name={{updateCardName}}&desc={{updateCardDesc}}",
+					"host": [
+						"{{baseUrl}}cards"
+					],
+					"path": [
+						"{{cardID}}"
+					],
+					"query": [
+						{
+							"key": null,
+							"value": null
+						},
+						{
+							"key": "key",
+							"value": "{{key}}"
+						},
+						{
+							"key": "token",
+							"value": "{{token}}"
+						},
+						{
+							"key": "name",
+							"value": "{{updateCardName}}"
+						},
+						{
+							"key": "desc",
+							"value": "{{updateCardDesc}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Usuwanie karty",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0a148af6-916c-4070-b8ef-7d043c0cc422",
+						"exec": [
+							"pm.test(\"should verify response status code\",()=>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"_postman_id": "887496c6-9915-4657-b733-538fd2f4bf09",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}cards/{{cardID}}?key={{key}}&token={{token}}",
+					"host": [
+						"{{baseUrl}}cards"
+					],
+					"path": [
+						"{{cardID}}"
+					],
+					"query": [
+						{
+							"key": null,
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "key",
+							"value": "{{key}}"
+						},
+						{
+							"key": "token",
+							"value": "{{token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Usuwanie Tablicy",
+			"_postman_id": "c5a4c9e0-7c5e-49db-acf1-17e0e9f28d46",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "Tworzenie etykiety",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "aff2650e-4b8a-4a2b-a2d3-7040b9ad43ca",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "bd119246-54d3-4c8c-a594-dd2d1530832a",
+						"exec": [
+							"let resBody;\r",
+							"\r",
+							"pm.test(\"should verify response status code\", ()=>{\r",
+							"    pm.expect(pm.response.code).to.eql(200)\r",
+							"})\r",
+							"pm.test(\"should verify  lenght of id\", () => {\r",
+							"    resBody = pm.response.json();\r",
+							"    pm.expect(resBody.id).to.have.lengthOf(24)\r",
+							"\r",
+							"})\r",
+							"\r",
+							"pm.test(\"should verify response headers\", ()=>{\r",
+							"    pm.expect(pm.response.headers.get(\"X-Xss-Protection\")).to.eql(\"1; mode=block\")\r",
+							"})\r",
+							"\r",
+							" pm.test(\"shoudl verify lenght of name\",()=>{\r",
+							"     pm.expect(resBody.name).to.have.lengthOf(20)\r",
+							" })\r",
+							"\r",
+							" pm.test(\"should verify response time\",() => {\r",
+							"     pm.expect(pm.response.responseTime).to.have.lessThan(200)\r",
+							" })"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"_postman_id": "6399656e-d2d2-4f35-b578-fcbf816814a4",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}labels?key={{key}}&token={{token}}&name=etykieta kolorowa&color=yellow&idBoard=62d5bc7e66fad513991bc7e1",
+					"host": [
+						"{{baseUrl}}labels"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{key}}"
+						},
+						{
+							"key": "token",
+							"value": "{{token}}"
+						},
+						{
+							"key": "name",
+							"value": "etykieta kolorowa"
+						},
+						{
+							"key": "color",
+							"value": "yellow"
+						},
+						{
+							"key": "idBoard",
+							"value": "62d5bc7e66fad513991bc7e1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "b3ddb4e2-dc1a-419f-85b5-036065a5e26e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "f4fcc7a9-2a57-4567-91e3-bd6e730a5691",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "5b2301a0-940f-41f7-ac24-babcbbac37b1",
+			"key": "baseUrl",
+			"value": "https://api.trello.com/1/",
+			"type": "string"
+		},
+		{
+			"id": "57ad9b64-f8bc-4b04-817f-61ce625c1390",
+			"key": "board name",
+			"value": "Tablica z Api",
+			"type": "string"
+		},
+		{
+			"id": "a5d87759-cdb4-4671-91ac-91a50f69ef68",
+			"key": "listName",
+			"value": "W trakcie testów",
+			"type": "string"
+		},
+		{
+			"id": "f5099869-f219-416e-9b18-ffcaa2c205e8",
+			"key": "listID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "b87910fc-7f78-4ccd-8726-0c3a9f8774c9",
+			"key": "cardName",
+			"value": "Nie działa system logowania",
+			"type": "string"
+		},
+		{
+			"id": "74c48ecc-ef12-4faa-9d62-315471e3e7d7",
+			"key": "cardID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "0ff99994-ee42-4b9a-a179-87400c38b71b",
+			"key": "updateCardName",
+			"value": "nie działa system rejestracji ",
+			"type": "string"
+		},
+		{
+			"id": "1876372c-6ffa-4667-ac77-03594876b0ef",
+			"key": "updateCardDesc",
+			"value": "test test ",
+			"type": "string"
+		},
+		{
+			"id": "cde916df-9363-4845-b89b-e7f5d5fb3d6b",
+			"key": "IDtabel",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "7c09049c-cd91-4bb6-a030-de3e5fd43f55",
+			"key": "IDlebels",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "bef0631c-b227-4664-abfa-0b073b867eb3",
+			"key": "lebelsID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "47ec61f5-8dc6-4b68-b14e-d86e9907ae20",
+			"key": "lebelID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "6c2916fd-0879-4b47-ba46-c6b5f0eb155d",
+			"key": "labelID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "f5aad3c5-59a4-469b-a7f6-e66314c37859",
+			"key": "dadad",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "034752df-bd35-4a9f-868f-3a16ba537849",
+			"key": "cxzczc",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "0a5cbdf1-3042-472d-ac71-ecd590850524",
+			"key": "bodyID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "0564fa6a-ab12-4887-8a68-5c2dcf578837",
+			"key": "boardID",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
